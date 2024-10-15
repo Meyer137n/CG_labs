@@ -271,6 +271,8 @@ namespace сg_lab1
             //перевод в радианы
             float angle = (float)(toRotate * Math.PI /180);
             RotateAroundGlobalAxisX(angle);
+            DrawT();
+
         }
 
         //вращение вокруг OX влево
@@ -280,6 +282,7 @@ namespace сg_lab1
             //перевод в радианы
             float angle = (float)(toRotate * Math.PI / 180);
             RotateAroundGlobalAxisX(-angle);
+            DrawT();
         }
 
         // Общее вращение вокруг OY
