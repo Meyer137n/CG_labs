@@ -219,7 +219,7 @@
             // 
             // Stretch
             // 
-            this.Stretch.Location = new System.Drawing.Point(16, 356);
+            this.Stretch.Location = new System.Drawing.Point(16, 362);
             this.Stretch.Name = "Stretch";
             this.Stretch.Size = new System.Drawing.Size(183, 30);
             this.Stretch.TabIndex = 20;
@@ -229,7 +229,7 @@
             // 
             // Clench
             // 
-            this.Clench.Location = new System.Drawing.Point(16, 392);
+            this.Clench.Location = new System.Drawing.Point(16, 398);
             this.Clench.Name = "Clench";
             this.Clench.Size = new System.Drawing.Size(183, 30);
             this.Clench.TabIndex = 21;
@@ -239,33 +239,33 @@
             // 
             // taskOX
             // 
-            this.taskOX.Location = new System.Drawing.Point(16, 428);
+            this.taskOX.Location = new System.Drawing.Point(16, 450);
             this.taskOX.Name = "taskOX";
             this.taskOX.Size = new System.Drawing.Size(183, 30);
             this.taskOX.TabIndex = 22;
             this.taskOX.Text = "Вокруг оси OX";
             this.taskOX.UseVisualStyleBackColor = true;
-            this.taskOX.Click += new System.EventHandler(this.taskOX_Click);
+            this.taskOX.Click += new System.EventHandler(this.RotateAndAnimateX);
             // 
             // taskOY
             // 
-            this.taskOY.Location = new System.Drawing.Point(16, 464);
+            this.taskOY.Location = new System.Drawing.Point(16, 486);
             this.taskOY.Name = "taskOY";
             this.taskOY.Size = new System.Drawing.Size(183, 30);
             this.taskOY.TabIndex = 23;
             this.taskOY.Text = "Вокруг оси OY";
             this.taskOY.UseVisualStyleBackColor = true;
-            this.taskOY.Click += new System.EventHandler(this.taskOY_Click);
+            this.taskOY.Click += new System.EventHandler(this.RotateAndAnimateY);
             // 
             // taskOZ
             // 
-            this.taskOZ.Location = new System.Drawing.Point(16, 500);
+            this.taskOZ.Location = new System.Drawing.Point(16, 522);
             this.taskOZ.Name = "taskOZ";
             this.taskOZ.Size = new System.Drawing.Size(183, 30);
             this.taskOZ.TabIndex = 24;
             this.taskOZ.Text = "Вокруг оси OZ";
             this.taskOZ.UseVisualStyleBackColor = true;
-            this.taskOZ.Click += new System.EventHandler(this.taskOZ_Click);
+            this.taskOZ.Click += new System.EventHandler(this.RotateAndAnimateZ);
             // 
             // MainForm
             // 

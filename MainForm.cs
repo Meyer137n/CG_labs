@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Reflection.Metadata;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -7,7 +8,7 @@ namespace сg_lab1
 {
     public partial class MainForm : Form
     {
-        private float[,] Z;
+        private float[,] T;
         private float[,] proection;
         private int cenX;
         private int cenY;
@@ -19,8 +20,8 @@ namespace сg_lab1
         private void MainForm_Load(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
-            cenX = Size.Width / 2;
-            cenY = Size.Height / 2;
+            cenX = Size.Width / 2 - 700;
+            cenY = Size.Height / 2 - 250;
             SetDefaultPosition();
             //кабинетное проецирование относительно центра правосторонней системы координат
             float[,] p =
@@ -31,7 +32,7 @@ namespace сg_lab1
                 { cenX, cenY, 0, 1}
             };
             proection = p;
-            DrawZ();
+            DrawT();
         }
 
         //умножение матриц
@@ -109,16 +110,16 @@ namespace сg_lab1
         { -10, 0, 10, 1 }    // H' - нижняя левая точка ножки с высотой
     };
 
-            Z = DefT;
+            T = DefT;
         }
 
 
         // Отрисовка проекции буквы "T"
-        private void DrawZ()
+        private void DrawT()
         {
             _graphics = CreateGraphics();
             DrawAxis();
-            float[,] matrixDraw = Mult(Z, proection);
+            float[,] matrixDraw = Mult(T, proection);
 
             // Перекладина "T"
             _graphics.DrawLine(Pens.Red, matrixDraw[0, 0], matrixDraw[0, 1], matrixDraw[1, 0], matrixDraw[1, 1]); // A -> B
@@ -156,7 +157,7 @@ namespace сg_lab1
         private void buttonDeffaultPosition_Click(object sender, EventArgs e)
         {
             SetDefaultPosition();
-            DrawZ();
+            DrawT();
         }
 
         //движение вдоль OX в положительном направлении
@@ -170,8 +171,8 @@ namespace сg_lab1
                 { 0, 0, 1, 0},
                 { toMove, 0, 0, 1}
             };
-            Z = Mult(Z, Move);
-            DrawZ();
+            T = Mult(T, Move);
+            DrawT();
         }
 
         //движение вдоль OX в отрицательном направлении
@@ -185,8 +186,8 @@ namespace сg_lab1
                 { 0, 0, 1, 0},
                 { -toMove, 0, 0, 1}
             };
-            Z = Mult(Z, Move);
-            DrawZ();
+            T = Mult(T, Move);
+            DrawT();
         }
 
         //движение вдоль OY в положительном направлении
@@ -200,8 +201,8 @@ namespace сg_lab1
                 { 0, 0, 1, 0},
                 { 0, toMove, 0, 1}
             };
-            Z = Mult(Z, Move);
-            DrawZ();
+            T = Mult(T, Move);
+            DrawT();
         }
 
         //движение вдоль OY в отрицательном направлении
@@ -215,8 +216,8 @@ namespace сg_lab1
                 { 0, 0, 1, 0},
                 { 0, -toMove, 0, 1}
             };
-            Z = Mult(Z, Move);
-            DrawZ();
+            T = Mult(T, Move);
+            DrawT();
         }
 
         //движение вдоль OZ в положительном направлении
@@ -230,8 +231,8 @@ namespace сg_lab1
                 { 0, 0, 1, 0},
                 { 0, 0, toMove, 1}
             };
-            Z = Mult(Z, Move);
-            DrawZ();
+            T = Mult(T, Move);
+            DrawT();
         }
 
         //движение вдоль OZ в отрицательном направлении
@@ -245,8 +246,22 @@ namespace сg_lab1
                 { 0, 0, 1, 0},
                 { 0, 0, -toMove, 1}
             };
-            Z = Mult(Z, Move);
-            DrawZ();
+            T = Mult(T, Move);
+            DrawT();
+        }
+
+        // Общее вращение вокруг OX
+        private void RotateAroundGlobalAxisX(float angle)
+        {
+            float[,] RotateXGlobal =
+            {
+        { 1, 0, 0, 0 },
+        { 0, (float)Math.Cos(angle), -(float)Math.Sin(angle), 0 },
+        { 0, (float)Math.Sin(angle), (float)Math.Cos(angle), 0 },
+        { 0, 0, 0, 1 }
+    };
+
+            T = Mult(T, RotateXGlobal);
         }
 
         //вращение вокруг OX вправо
@@ -255,15 +270,7 @@ namespace сg_lab1
             int toRotate = Convert.ToInt32(RotateTextBox.Text);
             //перевод в радианы
             float angle = (float)(toRotate * Math.PI /180);
-            float[,] Rotate =
-            {
-                { 1, 0, 0, 0},
-                { 0, (float)(Math.Cos(angle)), (float)(Math.Sin(angle)), 0},
-                { 0, -(float)(Math.Sin(angle)), (float)(Math.Cos(angle)), 0},
-                { 0, 0, 0, 1}
-            };
-            Z = Mult(Z, Rotate);
-            DrawZ();
+            RotateAroundGlobalAxisX(angle);
         }
 
         //вращение вокруг OX влево
@@ -272,15 +279,21 @@ namespace сg_lab1
             int toRotate = Convert.ToInt32(RotateTextBox.Text);
             //перевод в радианы
             float angle = (float)(toRotate * Math.PI / 180);
-            float[,] Rotate =
+            RotateAroundGlobalAxisX(-angle);
+        }
+
+        // Общее вращение вокруг OY
+        private void RotateAroundGlobalAxisY(float angle)
+        {
+            float[,] RotateYGlobal =
             {
-                { 1, 0, 0, 0},
-                { 0, (float)Math.Cos(angle), -((float)(Math.Sin(angle))), 0},
-                { 0, ((float)(Math.Sin(angle))), ((float)(Math.Cos(angle))), 0},
-                { 0, 0, 0, 1}
+                { (float)Math.Cos(angle), 0, -(float)Math.Sin(angle), 0 },
+                { 0, 1, 0, 0 },
+                { (float)Math.Sin(angle), 0, (float)Math.Cos(angle), 0 },
+                { 0, 0, 0, 1 }
             };
-            Z = Mult(Z, Rotate);
-            DrawZ();
+
+            T = Mult(T, RotateYGlobal);
         }
 
         //вращение вокруг OY вправо
@@ -289,15 +302,8 @@ namespace сg_lab1
             int toRotate = Convert.ToInt32(RotateTextBox.Text);
             //перевод в радианы
             float angle = (float)(toRotate * Math.PI / 180);
-            float[,] Rotate =
-            {
-                { ((float)(Math.Cos(angle))), 0, ((float)(Math.Sin(angle))), 0},
-                { 0, 1, 0, 0},
-                { -((float)(Math.Sin(angle))), 0, ((float)(Math.Cos(angle))), 0},
-                { 0, 0, 0, 1}
-            };
-            Z = Mult(Z, Rotate);
-            DrawZ();
+            RotateAroundGlobalAxisY(angle);
+            DrawT();
         }
 
         //вращение вокруг OY влево
@@ -306,15 +312,23 @@ namespace сg_lab1
             int toRotate = Convert.ToInt32(RotateTextBox.Text);
             //перевод в радианы
             float angle = (float)(toRotate * Math.PI / 180);
-            float[,] Rotate =
+            RotateAroundGlobalAxisY(-angle);
+            DrawT();
+        }
+
+
+        // Общее вращение вокруг OZ
+        private void RotateAroundGlobalAxisZ(float angle)
+        {
+            float[,] RotateZGlobal =
             {
-                { ((float)(Math.Cos(angle))), 0, -((float)(Math.Sin(angle))), 0},
-                { 0, 1, 0, 0},
-                { ((float)(Math.Sin(angle))), 0, ((float)(Math.Cos(angle))), 0},
-                { 0, 0, 0, 1}
-            };
-            Z = Mult(Z, Rotate);
-            DrawZ();
+        { (float)Math.Cos(angle), (float)Math.Sin(angle), 0, 0 },
+        { -(float)Math.Sin(angle), (float)Math.Cos(angle), 0, 0 },
+        { 0, 0, 1, 0 },
+        { 0, 0, 0, 1 }
+    };
+
+            T = Mult(T, RotateZGlobal);
         }
 
         //вращение вокруг OZ вправо
@@ -323,15 +337,8 @@ namespace сg_lab1
             int toRotate = Convert.ToInt32(RotateTextBox.Text);
             //перевод в радианы
             float angle = (float)(toRotate * Math.PI / 180);
-            float[,] Rotate =
-            {
-                { ((float)(Math.Cos(angle))), -((float)(Math.Sin(angle))), 0, 0},
-                { ((float)(Math.Sin(angle))), ((float)(Math.Cos(angle))), 0, 0},
-                { 0, 0, 1, 0},
-                { 0, 0, 0, 1}
-            };
-            Z = Mult(Z, Rotate);
-            DrawZ();
+            RotateAroundGlobalAxisZ(-angle);
+            DrawT();
         }
 
         //вращение вокруг OZ влево
@@ -340,15 +347,8 @@ namespace сg_lab1
             int toRotate = Convert.ToInt32(RotateTextBox.Text);
             //перевод в радианы
             float angle = (float)(toRotate * Math.PI / 180);
-            float[,] Rotate =
-            {
-                { ((float)(Math.Cos(angle))), ((float)(Math.Sin(angle))), 0, 0},
-                { -((float)(Math.Sin(angle))), ((float)(Math.Cos(angle))), 0, 0},
-                { 0, 0, 1, 0},
-                { 0, 0, 0, 1}
-            };
-            Z = Mult(Z, Rotate);
-            DrawZ();
+            RotateAroundGlobalAxisZ(angle);
+            DrawT();
         }
 
         //растяжение
@@ -361,8 +361,8 @@ namespace сg_lab1
                 { 0, 0, 2, 0},
                 { 0, 0, 0, 1}
             };
-            Z = Mult(Z, Stretch);
-            DrawZ();
+            T = Mult(T, Stretch);
+            DrawT();
         }
 
         //сжатие
@@ -375,118 +375,151 @@ namespace сg_lab1
                 { 0, 0, (float)(0.5), 0},
                 { 0, 0, 0, 1}
             };
-            Z = Mult(Z, Clench);
-            DrawZ();
+            T = Mult(T, Clench);
+            DrawT();
         }
 
-        private float[] GetGeometricCenter()
+
+        // Вращение вокруг своей оси X
+        private void SpinX()
         {
-            float centerX = 0, centerY = 0, centerZ = 0;
-            int numPoints = Z.GetLength(0);
+            int toRotate = 5;
+            float angle = (float)(toRotate * Math.PI / 180);
 
-            for (int i = 0; i < numPoints; i++)
-            {
-                centerX += Z[i, 0];
-                centerY += Z[i, 1];
-                centerZ += Z[i, 2];
-            }
+            // Вычисляем центр фигуры
+            float centerX = (T[0, 0] + T[1, 0]) / 2;
+            float centerY = (T[4, 1] + T[7, 1]) / 2;
+            float centerZ = (T[0, 2] + T[8, 2]) / 2;
 
-            centerX /= numPoints;
-            centerY /= numPoints;
-            centerZ /= numPoints;
-
-            return new float[] { centerX, centerY, centerZ };
-        }
-
-        private void MoveToOrigin(float[] center)
-        {
-            float[,] MoveToOrigin =
+            // Матрица вращения вокруг оси X без смещения в начало координат
+            float[,] Rotate =
             {
         { 1, 0, 0, 0 },
-        { 0, 1, 0, 0 },
-        { 0, 0, 1, 0 },
-        { -center[0], -center[1], -center[2], 1 }
+        { 0, (float)Math.Cos(angle), -(float)Math.Sin(angle), 0 },
+        { 0, (float)Math.Sin(angle), (float)Math.Cos(angle), 0 },
+        { 0, 0, 0, 1 }
     };
 
-            Z = Mult(Z, MoveToOrigin);
-        }
-
-        private void Rotate(float angle, char axis)
-        {
-            float[,] RotateMatrix;
-            switch (axis)
+            // Применяем вращение к каждой вершине
+            for (int i = 0; i < T.GetLength(0); i++)
             {
-                case 'X':
-                    RotateMatrix = new float[,]
+                float[] vertex = { T[i, 0] - centerX, T[i, 1] - centerY, T[i, 2] - centerZ, 1 };
+                float[] rotatedVertex = new float[4];
+
+                for (int row = 0; row < 4; row++)
+                {
+                    rotatedVertex[row] = 0;
+                    for (int col = 0; col < 4; col++)
                     {
-                { 1, 0, 0, 0 },
-                { 0, (float)Math.Cos(angle), (float)Math.Sin(angle), 0 },
-                { 0, -(float)Math.Sin(angle), (float)Math.Cos(angle), 0 },
-                { 0, 0, 0, 1 }
-                    };
-                    break;
-                case 'Y':
-                    RotateMatrix = new float[,]
-                    {
-                { (float)Math.Cos(angle), 0, -(float)Math.Sin(angle), 0 },
-                { 0, 1, 0, 0 },
-                { (float)Math.Sin(angle), 0, (float)Math.Cos(angle), 0 },
-                { 0, 0, 0, 1 }
-                    };
-                    break;
-                case 'Z':
-                    RotateMatrix = new float[,]
-                    {
-                { (float)Math.Cos(angle), (float)Math.Sin(angle), 0, 0 },
-                { -(float)Math.Sin(angle), (float)Math.Cos(angle), 0, 0 },
-                { 0, 0, 1, 0 },
-                { 0, 0, 0, 1 }
-                    };
-                    break;
-                default:
-                    throw new ArgumentException("Неправильная ось вращения");
+                        rotatedVertex[row] += Rotate[row, col] * vertex[col];
+                    }
+                }
+
+                // Обновляем координаты
+                T[i, 0] = rotatedVertex[0] + centerX;
+                T[i, 1] = rotatedVertex[1] + centerY;
+                T[i, 2] = rotatedVertex[2] + centerZ;
             }
 
-            Z = Mult(Z, RotateMatrix);
+            DrawT();
         }
 
-        private void MoveBackToCenter(float[] center)
+
+        // Вращение вокруг своей оси Y
+        private void SpinY()
         {
-            float[,] MoveBack =
+            int toRotate = 5;
+            float angle = (float)(toRotate * Math.PI / 180);
+
+            // Вычисляем центр фигуры
+            float centerX = (T[0, 0] + T[1, 0]) / 2;
+            float centerY = (T[4, 1] + T[7, 1]) / 2;
+            float centerZ = (T[0, 2] + T[8, 2]) / 2;
+
+            // Матрица вращения вокруг оси Y
+            float[,] Rotate =
             {
-        { 1, 0, 0, 0 },
+        { (float)Math.Cos(angle), 0, (float)Math.Sin(angle), 0 },
         { 0, 1, 0, 0 },
-        { 0, 0, 1, 0 },
-        { center[0], center[1], center[2], 1 }
+        { -(float)Math.Sin(angle), 0, (float)Math.Cos(angle), 0 },
+        { 0, 0, 0, 1 }
     };
 
-            Z = Mult(Z, MoveBack);
+            // Применяем вращение к каждой вершине
+            for (int i = 0; i < T.GetLength(0); i++)
+            {
+                float[] vertex = { T[i, 0] - centerX, T[i, 1] - centerY, T[i, 2] - centerZ, 1 };
+                float[] rotatedVertex = new float[4];
+
+                for (int row = 0; row < 4; row++)
+                {
+                    rotatedVertex[row] = 0;
+                    for (int col = 0; col < 4; col++)
+                    {
+                        rotatedVertex[row] += Rotate[row, col] * vertex[col];
+                    }
+                }
+
+                // Обновляем координаты
+                T[i, 0] = rotatedVertex[0] + centerX;
+                T[i, 1] = rotatedVertex[1] + centerY;
+                T[i, 2] = rotatedVertex[2] + centerZ;
+            }
+
+            DrawT();
         }
 
-        private void RotateAroundGeometricCenter(float angle, char axis)
+
+        // Вращение вокруг своей оси Z
+        private void SpinZ()
         {
-            // Шаг 1: Вычисляем центр фигуры
-            float[] center = GetGeometricCenter();
+            int toRotate = 5;
+            float angle = (float)(toRotate * Math.PI / 180);
 
-            // Шаг 2: Перемещаем фигуру в начало координат
-            MoveToOrigin(center);
+            // Вычисляем центр фигуры
+            float centerX = (T[0, 0] + T[1, 0]) / 2;
+            float centerY = (T[4, 1] + T[7, 1]) / 2;
+            float centerZ = (T[0, 2] + T[8, 2]) / 2;
 
-            // Шаг 3: Выполняем вращение
-            Rotate(angle, axis);
+            // Матрица вращения вокруг оси Z
+            float[,] Rotate =
+            {
+        { (float)Math.Cos(angle), -(float)Math.Sin(angle), 0, 0 },
+        { (float)Math.Sin(angle), (float)Math.Cos(angle), 0, 0 },
+        { 0, 0, 1, 0 },
+        { 0, 0, 0, 1 }
+    };
 
-            // Шаг 4: Возвращаем фигуру на исходное место
-            MoveBackToCenter(center);
+            // Применяем вращение к каждой вершине
+            for (int i = 0; i < T.GetLength(0); i++)
+            {
+                float[] vertex = { T[i, 0] - centerX, T[i, 1] - centerY, T[i, 2] - centerZ, 1 };
+                float[] rotatedVertex = new float[4];
 
-            // Перерисовываем фигуру
-            DrawZ();
+                for (int row = 0; row < 4; row++)
+                {
+                    rotatedVertex[row] = 0;
+                    for (int col = 0; col < 4; col++)
+                    {
+                        rotatedVertex[row] += Rotate[row, col] * vertex[col];
+                    }
+                }
+
+                // Обновляем координаты
+                T[i, 0] = rotatedVertex[0] + centerX;
+                T[i, 1] = rotatedVertex[1] + centerY;
+                T[i, 2] = rotatedVertex[2] + centerZ;
+            }
+
+            DrawT();
         }
 
+        // Анимация по оси X
         private void RotateAndAnimateX(object sender, EventArgs e)
         {
             int steps = 360; // Количество шагов для полного оборота вокруг оси X
             int currentStep = 0;
             float globalAngleStep = (float)(Math.PI / 180); // Угол в радианах для вращения вокруг оси X (1 градус)
-            float centerAngleStep = (float)(Math.PI / 90);  // Ускоренное вращение вокруг центра (4 градуса)
 
             Timer timer = new Timer();
             timer.Interval = 10; // Ускорим анимацию
@@ -496,14 +529,11 @@ namespace сg_lab1
                 {
                     currentStep++;
 
-                    // Вращение фигуры вокруг оси X системы координат
+                    // Вращение фигуры вокруг оси Y системы координат
                     RotateAroundGlobalAxisX(globalAngleStep);
 
-                    // Ускоренное вращение фигуры вокруг её геометрического центра относительно оси X
-                    RotateAroundGeometricCenter(centerAngleStep, 'X');
-
-                    // Перерисовка фигуры
-                    DrawZ();
+                    // Вращение фигуры вокруг её геометрического центра относительно оси X
+                    SpinX();
                 }
                 else
                 {
@@ -515,12 +545,12 @@ namespace сg_lab1
             timer.Start();
         }
 
+        // Анимация по оси Y
         private void RotateAndAnimateY(object sender, EventArgs e)
         {
             int steps = 360; // Количество шагов для полного оборота вокруг глобальной оси
             int currentStep = 0;
-            float globalAngleStep = (float)(Math.PI / 180); // Угол в радианах для вращения вокруг оси Y (1 градус)
-            float centerAngleStep = (float)(Math.PI / 90);  // Увеличиваем скорость вращения вокруг центра (4 градуса)
+            float globalAngleStep = (float)(Math.PI / 180);  // Увеличиваем скорость вращения вокруг центра (4 градуса)
 
             Timer timer = new Timer();
             timer.Interval = 10; // Ускорим анимацию, уменьшив интервал таймера до 10 мс
@@ -534,10 +564,7 @@ namespace сg_lab1
                     RotateAroundGlobalAxisY(globalAngleStep);
 
                     // Ускоренное вращение фигуры вокруг её геометрического центра
-                    RotateAroundGeometricCenter(centerAngleStep, 'Y');
-
-                    // Перерисовка фигуры
-                    DrawZ();
+                    SpinY();
                 }
                 else
                 {
@@ -549,12 +576,12 @@ namespace сg_lab1
             timer.Start();
         }
 
+        // Анимация по оси Z
         private void RotateAndAnimateZ(object sender, EventArgs e)
         {
             int steps = 360; // Количество шагов для полного оборота вокруг оси Z
             int currentStep = 0;
             float globalAngleStep = (float)(Math.PI / 180); // Угол в радианах для вращения вокруг оси Z (1 градус)
-            float centerAngleStep = (float)(Math.PI / 90);  // Ускоренное вращение вокруг центра (4 градуса)
 
             Timer timer = new Timer();
             timer.Interval = 10; // Ускорим анимацию
@@ -568,10 +595,7 @@ namespace сg_lab1
                     RotateAroundGlobalAxisZ(globalAngleStep);
 
                     // Ускоренное вращение фигуры вокруг её геометрического центра относительно оси Z
-                    RotateAroundGeometricCenter(centerAngleStep, 'Z');
-
-                    // Перерисовка фигуры
-                    DrawZ();
+                    SpinZ();
                 }
                 else
                 {
@@ -582,67 +606,5 @@ namespace сg_lab1
 
             timer.Start();
         }
-
-
-        private void RotateAroundGlobalAxisX(float angle)
-        {
-            float[,] RotateXGlobal =
-            {
-        { 1, 0, 0, 0 },
-        { 0, (float)Math.Cos(angle), -(float)Math.Sin(angle), 0 },
-        { 0, (float)Math.Sin(angle), (float)Math.Cos(angle), 0 },
-        { 0, 0, 0, 1 }
-    };
-
-            Z = Mult(Z, RotateXGlobal);
-        }
-
-        private void RotateAroundGlobalAxisY(float angle)
-        {
-            float[,] RotateYGlobal =
-            {
-                { (float)Math.Cos(angle), 0, -(float)Math.Sin(angle), 0 },
-                { 0, 1, 0, 0 },
-                { (float)Math.Sin(angle), 0, (float)Math.Cos(angle), 0 },
-                { 0, 0, 0, 1 }
-            };
-
-            Z = Mult(Z, RotateYGlobal);
-        }
-
-        //анимация вращения вокруг OY
-        private void RotateAroundGlobalAxisZ(float angle)
-        {
-            float[,] RotateZGlobal =
-            {
-        { (float)Math.Cos(angle), (float)Math.Sin(angle), 0, 0 },
-        { -(float)Math.Sin(angle), (float)Math.Cos(angle), 0, 0 },
-        { 0, 0, 1, 0 },
-        { 0, 0, 0, 1 }
-    };
-
-            Z = Mult(Z, RotateZGlobal);
-        }
-
-
-        //анимация движения по спирали вдоль OY
-        private void taskOY_Click(object sender, EventArgs e)
-        {
-            RotateAndAnimateY(sender, e);
-        }
-
-        //анимация движения по спирали вдоль OX
-        private void taskOX_Click(object sender, EventArgs e)
-        {
-            RotateAndAnimateX(sender, e);
-        }
-
-        //анимация движения по спирали вдоль OZ
-        private void taskOZ_Click(object sender, EventArgs e)
-        {
-            RotateAndAnimateZ(sender, e);
-        }
-
     }
-
 }
