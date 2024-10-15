@@ -1,4 +1,4 @@
-﻿namespace сg_lab1
+﻿namespace CG_LAB1
 {
     partial class MainForm
     {
@@ -110,15 +110,15 @@
             this.MovePlusZ.UseVisualStyleBackColor = true;
             this.MovePlusZ.Click += new System.EventHandler(this.MovePlusZ_Click);
             // 
-            // MoveMinusZ
+            // MoveMinusX
             // 
-            this.MoveMinusZ.Location = new System.Drawing.Point(146, 183);
-            this.MoveMinusZ.Name = "MoveMinusZ";
-            this.MoveMinusZ.Size = new System.Drawing.Size(50, 30);
-            this.MoveMinusZ.TabIndex = 8;
-            this.MoveMinusZ.Text = "Z-";
-            this.MoveMinusZ.UseVisualStyleBackColor = true;
-            this.MoveMinusZ.Click += new System.EventHandler(this.MoveMinusZ_Click);
+            this.MoveMinusX.Location = new System.Drawing.Point(16, 183);
+            this.MoveMinusX.Name = "MoveMinusX";
+            this.MoveMinusX.Size = new System.Drawing.Size(50, 30);
+            this.MoveMinusX.TabIndex = 6;
+            this.MoveMinusX.Text = "X-";
+            this.MoveMinusX.UseVisualStyleBackColor = true;
+            this.MoveMinusX.Click += new System.EventHandler(this.MoveMinusX_Click);
             // 
             // MoveMinusY
             // 
@@ -130,15 +130,15 @@
             this.MoveMinusY.UseVisualStyleBackColor = true;
             this.MoveMinusY.Click += new System.EventHandler(this.MoveMinusY_Click);
             // 
-            // MoveMinusX
+            // MoveMinusZ
             // 
-            this.MoveMinusX.Location = new System.Drawing.Point(16, 183);
-            this.MoveMinusX.Name = "MoveMinusX";
-            this.MoveMinusX.Size = new System.Drawing.Size(50, 30);
-            this.MoveMinusX.TabIndex = 6;
-            this.MoveMinusX.Text = "X-";
-            this.MoveMinusX.UseVisualStyleBackColor = true;
-            this.MoveMinusX.Click += new System.EventHandler(this.MoveMinusX_Click);
+            this.MoveMinusZ.Location = new System.Drawing.Point(146, 183);
+            this.MoveMinusZ.Name = "MoveMinusZ";
+            this.MoveMinusZ.Size = new System.Drawing.Size(50, 30);
+            this.MoveMinusZ.TabIndex = 8;
+            this.MoveMinusZ.Text = "Z-";
+            this.MoveMinusZ.UseVisualStyleBackColor = true;
+            this.MoveMinusZ.Click += new System.EventHandler(this.MoveMinusZ_Click);
             // 
             // RotateTextBox
             // 
@@ -245,7 +245,7 @@
             this.taskOX.TabIndex = 22;
             this.taskOX.Text = "Вокруг оси OX";
             this.taskOX.UseVisualStyleBackColor = true;
-            this.taskOX.Click += new System.EventHandler(this.RotateAndAnimateX);
+            this.taskOX.Click += new System.EventHandler(this.RotateAndAnimateX_Click);
             // 
             // taskOY
             // 
@@ -255,7 +255,7 @@
             this.taskOY.TabIndex = 23;
             this.taskOY.Text = "Вокруг оси OY";
             this.taskOY.UseVisualStyleBackColor = true;
-            this.taskOY.Click += new System.EventHandler(this.RotateAndAnimateY);
+            this.taskOY.Click += new System.EventHandler(this.RotateAndAnimateY_Click);
             // 
             // taskOZ
             // 
@@ -265,7 +265,7 @@
             this.taskOZ.TabIndex = 24;
             this.taskOZ.Text = "Вокруг оси OZ";
             this.taskOZ.UseVisualStyleBackColor = true;
-            this.taskOZ.Click += new System.EventHandler(this.RotateAndAnimateZ);
+            this.taskOZ.Click += new System.EventHandler(this.RotateAndAnimateZ_Click);
             // 
             // MainForm
             // 

@@ -518,7 +518,7 @@ namespace CG_LAB1
         }
 
         // Анимация по оси X
-        private void RotateAndAnimateX(object sender, EventArgs e)
+        private void RotateAndAnimateX_Click(object sender, EventArgs e)
         {
             int steps = 360; // Количество шагов для полного оборота вокруг оси X
             int currentStep = 0;
@@ -549,7 +549,7 @@ namespace CG_LAB1
         }
 
         // Анимация по оси Y
-        private void RotateAndAnimateY(object sender, EventArgs e)
+        private void RotateAndAnimateY_Click(object sender, EventArgs e)
         {
             int steps = 360; // Количество шагов для полного оборота вокруг глобальной оси
             int currentStep = 0;
@@ -580,7 +580,7 @@ namespace CG_LAB1
         }
 
         // Анимация по оси Z
-        private void RotateAndAnimateZ(object sender, EventArgs e)
+        private void RotateAndAnimateZ_Click(object sender, EventArgs e)
         {
             int steps = 360; // Количество шагов для полного оборота вокруг оси Z
             int currentStep = 0;
