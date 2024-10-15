@@ -4,7 +4,7 @@ using System.Reflection.Metadata;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
-namespace сg_lab1
+namespace CG_LAB1
 {
     public partial class MainForm : Form
     {
@@ -290,9 +290,9 @@ namespace сg_lab1
         {
             float[,] RotateYGlobal =
             {
-                { (float)Math.Cos(angle), 0, -(float)Math.Sin(angle), 0 },
+                { (float)Math.Cos(angle), 0, (float)Math.Sin(angle), 0 },
                 { 0, 1, 0, 0 },
-                { (float)Math.Sin(angle), 0, (float)Math.Cos(angle), 0 },
+                { -(float)Math.Sin(angle), 0, (float)Math.Cos(angle), 0 },
                 { 0, 0, 0, 1 }
             };
 
@@ -325,8 +325,8 @@ namespace сg_lab1
         {
             float[,] RotateZGlobal =
             {
-        { (float)Math.Cos(angle), (float)Math.Sin(angle), 0, 0 },
-        { -(float)Math.Sin(angle), (float)Math.Cos(angle), 0, 0 },
+        { (float)Math.Cos(angle), -(float)Math.Sin(angle), 0, 0 },
+        { (float)Math.Sin(angle), (float)Math.Cos(angle), 0, 0 },
         { 0, 0, 1, 0 },
         { 0, 0, 0, 1 }
     };
@@ -340,7 +340,7 @@ namespace сg_lab1
             int toRotate = Convert.ToInt32(RotateTextBox.Text);
             //перевод в радианы
             float angle = (float)(toRotate * Math.PI / 180);
-            RotateAroundGlobalAxisZ(-angle);
+            RotateAroundGlobalAxisZ(angle);
             DrawT();
         }
 
@@ -350,7 +350,7 @@ namespace сg_lab1
             int toRotate = Convert.ToInt32(RotateTextBox.Text);
             //перевод в радианы
             float angle = (float)(toRotate * Math.PI / 180);
-            RotateAroundGlobalAxisZ(angle);
+            RotateAroundGlobalAxisZ(-angle);
             DrawT();
         }
 
@@ -533,7 +533,7 @@ namespace сg_lab1
                     currentStep++;
 
                     // Вращение фигуры вокруг оси Y системы координат
-                    RotateAroundGlobalAxisX(globalAngleStep);
+                    RotateAroundGlobalAxisX(-globalAngleStep);
 
                     // Вращение фигуры вокруг её геометрического центра относительно оси X
                     SpinX();
@@ -564,7 +564,7 @@ namespace сg_lab1
                     currentStep++;
 
                     // Вращение фигуры вокруг оси Y системы координат
-                    RotateAroundGlobalAxisY(globalAngleStep);
+                    RotateAroundGlobalAxisY(-globalAngleStep);
 
                     // Ускоренное вращение фигуры вокруг её геометрического центра
                     SpinY();
@@ -595,7 +595,7 @@ namespace сg_lab1
                     currentStep++;
 
                     // Вращение фигуры вокруг оси Z системы координат
-                    RotateAroundGlobalAxisZ(globalAngleStep);
+                    RotateAroundGlobalAxisZ(-globalAngleStep);
 
                     // Ускоренное вращение фигуры вокруг её геометрического центра относительно оси Z
                     SpinZ();
